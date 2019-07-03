@@ -12,9 +12,15 @@ See releases tab. Not cross-platform (yet?).
 
 You must have BOSH CLI installed and working.
 
-See
 ```
-bleh -h
+Usage: bleh STEMCELL_VERSION [options]
+
+Options:
+    -h, --help          print this help menu
+    -i, --infrastructure INFRASTRUCTURE
+                        what infrastructure (options: alicloud, aws, azure,
+                        gcp, openstack, vcloud, vsphere, bosh-lite; default:
+                        bosh-lite)
 ```
 
 ## Dev
