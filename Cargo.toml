@@ -1,0 +1,9 @@
+[package]
+name = "bleh"
+version = "1.0.0"
+authors = [ "Greg Cobb <gregmcobb@gmail.com>" ]
+
+[dependencies]
+getopts = "0.2"
+
+
