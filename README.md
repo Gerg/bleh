@@ -35,6 +35,35 @@ make build
 ./target/debug/bleh
 ```
 
+### Release
+
+#### OSX->OSX (or probably any other platform to itself)
+```
+make release
+```
+
+#### OSX->Linux
+
+Note, this will statically link dependencies, so the resulting binary will be
+~4x larger than a native build. You should probably just build it natively.
+
+First Time:
+```
+brew install FiloSottile/musl-cross/musl-cross
+```
+This will take _forever_ to build.
+
+```
+rustup target add x86_64-unknown-linux-musl
+```
+
+Thereafter:
+```
+make release-cross-linux
+```
+
+Credit to https://grahamenos.com/rust-osx-linux-musl.html for figuring this out.
+
 ### Formatting
 First Time:
 ```
