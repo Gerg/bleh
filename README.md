@@ -6,7 +6,7 @@ This is a _very important_ tool for uploading BOSH stemcells.
 
 ## Installing
 
-See releases tab. Not cross-platform (yet?).
+See releases tab. Built for OSX and Linux.
 
 ## Usage
 
