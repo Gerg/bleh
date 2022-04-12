@@ -13,7 +13,7 @@ See releases tab. Built for OSX and Linux.
 You must have BOSH CLI installed and working.
 
 ```
-Usage: ./target/debug/bleh STEMCELL_VERSION [options]
+Usage: bleh STEMCELL_VERSION [options]
 
 Options:
     -h, --help          print this help menu
