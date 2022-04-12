@@ -13,7 +13,7 @@ See releases tab. Built for OSX and Linux.
 You must have BOSH CLI installed and working.
 
 ```
-Usage: bleh STEMCELL_VERSION [options]
+Usage: ./target/debug/bleh STEMCELL_VERSION [options]
 
 Options:
     -h, --help          print this help menu
@@ -21,6 +21,9 @@ Options:
                         what infrastructure (options: alicloud, aws, azure,
                         gcp, openstack, vcloud, vsphere, bosh-lite; default:
                         bosh-lite)
+    -o, --operating-system OPERATING_SYSTEM
+                        what operating system version (options: xenial,
+                        bionic, jammy; default: bionic)
 ```
 
 ## Dev
