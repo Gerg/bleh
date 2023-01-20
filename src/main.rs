@@ -33,7 +33,7 @@ const XENIAL: &str = "xenial";
 const BIONIC: &str = "bionic";
 const JAMMY: &str = "jammy";
 
-const DEFAULT_OS: &str = BIONIC;
+const DEFAULT_OS: &str = JAMMY;
 
 const OS_NAMES: [&str; 3] = [
     XENIAL, BIONIC, JAMMY
