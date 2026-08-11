@@ -1,6 +1,7 @@
 [package]
 name = "bleh"
-version = "1.0.0"
+version = "4.0.0"
+edition = "2015"
 authors = [ "Greg Cobb <gregmcobb@gmail.com>" ]
 
 [dependencies]

@@ -3,8 +3,10 @@ use getopts::Options;
 use std::env;
 use std::process::{exit, Command};
 
-const AWS_BUCKET_URL: &str = "https://s3.amazonaws.com/bosh-core-stemcells";
 const GCP_BUCKET_URL: &str = "https://storage.googleapis.com/bosh-core-stemcells";
+
+const EMPTY_TRAILER: &str = "";
+const GO_AGENT_TRAILER: &str = "-go_agent";
 
 const ALICLOUD: &str = "alicloud";
 const ALICLOUD_PATH: &str = "alicloud-kvm";
@@ -29,15 +31,13 @@ const INF_NAMES: [&str; 8] = [
     ALICLOUD, AWS, AZURE, GCP, OPENSTACK, VCLOUD, VSPHERE, BOSH_LITE,
 ];
 
-const XENIAL: &str = "xenial";
-const BIONIC: &str = "bionic";
 const JAMMY: &str = "jammy";
+const NOBLE: &str = "noble";
+const RESOLUTE: &str = "resolute";
 
-const DEFAULT_OS: &str = JAMMY;
+const DEFAULT_OS: &str = NOBLE;
 
-const OS_NAMES: [&str; 3] = [
-    XENIAL, BIONIC, JAMMY
-];
+const OS_NAMES: [&str; 3] = [JAMMY, NOBLE, RESOLUTE];
 
 struct Infrastructure {
     name: &'static str,
@@ -46,7 +46,8 @@ struct Infrastructure {
 
 struct OperatingSystem {
     name: &'static str,
-    bucket_url: &'static str
+    bucket_url: &'static str,
+    trailer: &'static str,
 }
 
 fn construct_inf(inf_option: Option<String>) -> Result<Infrastructure, String> {
@@ -55,14 +56,38 @@ fn construct_inf(inf_option: Option<String>) -> Result<Infrastructure, String> {
         None => String::from(DEFAULT_INF),
     };
     return match &*inf {
-        ALICLOUD => Ok(Infrastructure{name: ALICLOUD, path: ALICLOUD_PATH}),
-        AWS => Ok(Infrastructure{name: AWS, path: AWS_PATH}),
-        AZURE => Ok(Infrastructure{name: AZURE, path: AZURE_PATH}),
-        GCP => Ok(Infrastructure{name: GCP, path: GCP_PATH}),
-        OPENSTACK => Ok(Infrastructure{name: OPENSTACK, path: OPENSTACK_PATH}),
-        VCLOUD => Ok(Infrastructure{name: VCLOUD, path: VCLOUD_PATH}),
-        VSPHERE => Ok(Infrastructure{name: VSPHERE, path: VSPHERE_PATH}),
-        BOSH_LITE => Ok(Infrastructure{name: BOSH_LITE, path: BOSH_LITE_PATH}),
+        ALICLOUD => Ok(Infrastructure {
+            name: ALICLOUD,
+            path: ALICLOUD_PATH,
+        }),
+        AWS => Ok(Infrastructure {
+            name: AWS,
+            path: AWS_PATH,
+        }),
+        AZURE => Ok(Infrastructure {
+            name: AZURE,
+            path: AZURE_PATH,
+        }),
+        GCP => Ok(Infrastructure {
+            name: GCP,
+            path: GCP_PATH,
+        }),
+        OPENSTACK => Ok(Infrastructure {
+            name: OPENSTACK,
+            path: OPENSTACK_PATH,
+        }),
+        VCLOUD => Ok(Infrastructure {
+            name: VCLOUD,
+            path: VCLOUD_PATH,
+        }),
+        VSPHERE => Ok(Infrastructure {
+            name: VSPHERE,
+            path: VSPHERE_PATH,
+        }),
+        BOSH_LITE => Ok(Infrastructure {
+            name: BOSH_LITE,
+            path: BOSH_LITE_PATH,
+        }),
         _ => Err(format!(
             "\"{name}\" is not a valid infrastructure.",
             name = inf
@@ -77,9 +102,21 @@ fn construct_os(os_option: Option<String>) -> Result<OperatingSystem, String> {
     };
 
     return match &*os {
-        XENIAL => Ok(OperatingSystem{ name: XENIAL, bucket_url: AWS_BUCKET_URL }),
-        BIONIC => Ok(OperatingSystem{ name: BIONIC, bucket_url: GCP_BUCKET_URL }),
-        JAMMY => Ok(OperatingSystem{ name: JAMMY, bucket_url: GCP_BUCKET_URL }),
+        JAMMY => Ok(OperatingSystem {
+            name: JAMMY,
+            bucket_url: GCP_BUCKET_URL,
+            trailer: GO_AGENT_TRAILER,
+        }),
+        NOBLE => Ok(OperatingSystem {
+            name: NOBLE,
+            bucket_url: GCP_BUCKET_URL,
+            trailer: EMPTY_TRAILER,
+        }),
+        RESOLUTE => Ok(OperatingSystem {
+            name: RESOLUTE,
+            bucket_url: GCP_BUCKET_URL,
+            trailer: EMPTY_TRAILER,
+        }),
         _ => Err(format!(
             "\"{name}\" is not a valid operating system.",
             name = os
@@ -102,8 +139,9 @@ fn upload_stemcell(
         inf = inf.name
     );
     let stemcell_url = format!(
-        "{bucket_url}/{v}/bosh-stemcell-{v}-{inf}-ubuntu-{os}-go_agent.tgz",
+        "{bucket_url}/{v}/bosh-stemcell-{v}-{inf}-ubuntu-{os}{trailer}.tgz",
         bucket_url = os.bucket_url,
+        trailer = os.trailer,
         v = stemcell_version,
         inf = inf.path,
         os = os.name
